@@ -26,17 +26,6 @@ class Film(db.Model):
     def __repr__(self):
         return f'Film({self.title}, {self.release_date}, {self.uuid}, {self.distributed_by})'
 
-    def to_dict(self):
-        return {
-            'title': self.title,
-            'uuid': self.uuid,
-            'release_date': self.release_date.strftime('%Y-%m-%d'),
-            'distributed_by': self.distributed_by,
-            'description': self.description,
-            'length': self.length,
-            'rating': self.rating,
-        }
-
 
 class Actor(db.Model):
     __tablename__ = 'actor'
