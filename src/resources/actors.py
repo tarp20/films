@@ -36,7 +36,8 @@ class ActorListApi(Resource):
             return {'message': str(e)}, 400
         if not actor:
             return '', 404
-        actor = self.actor_schema.load(request.json, instance=actor, session=db.session)
+        actor = self.actor_schema.load(request.json, instance=actor,
+                                       session=db.session)
         db.session.add(actor)
         db.session.commit()
 

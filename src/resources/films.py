@@ -38,7 +38,8 @@ class FilmListApi(Resource):
             return {'message': str(e)}, 400
         if not film:
             return '', 404
-        film = self.film_schema.load(request.json, instance=film, session=db.session)
+        film = self.film_schema.load(request.json, instance=film,
+                                     session=db.session)
         db.session.add(film)
         db.session.commit()
 
@@ -47,7 +48,8 @@ class FilmListApi(Resource):
             film = db.session.query(Film).filter(Film.uuid == uuid).first()
         except ValidationError as e:
             return {'message': str(e)}, 400
-        film = self.film_schema.load(request.json, instance=film, session=db.session)
+        film = self.film_schema.load(request.json, instance=film,
+                                     session=db.session)
         db.session.add(film)
         db.session.commit()
 
