@@ -40,7 +40,7 @@ class Film(db.Model):
 
     def __repr__(self):
         return f'Film({self.title}, {self.release_date}, {self.uuid}, ' \
-               f'{self.distributed_by})'
+               f'{self.distributed_by}, {self.rating})'
 
 
 class Actor(db.Model):
