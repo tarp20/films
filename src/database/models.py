@@ -4,7 +4,7 @@ from src import db
 
 movies_actors = db.Table(
     'movies_actors',
-    db.Column('actor_id', db.Integer, db.ForeignKey('actor.id'),
+    db.Column('actor_id', db.Integer, db.ForeignKey('actors.id'),
               primary_key=True),
     db.Column('movie_id', db.Integer, db.ForeignKey('films.id'),
               primary_key=True),
@@ -23,6 +23,7 @@ class Film(db.Model):
     rating = db.Column(db.Float)
     actors = db.relationship('Actor', secondary=movies_actors, lazy='subquery',
                              backref=db.backref('films', lazy=True))
+    test = db.Column(db.Float)
 
     def __init__(self, title, release_date, description, distributed_by, length,
                  rating, actors=None):
@@ -44,7 +45,7 @@ class Film(db.Model):
 
 
 class Actor(db.Model):
-    __tablename__ = 'actor'
+    __tablename__ = 'actors'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False, unique=True)
