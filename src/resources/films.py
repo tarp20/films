@@ -1,23 +1,27 @@
 from flask import request
 from flask_restful import Resource
 from marshmallow import ValidationError
+from sqlalchemy.orm import selectinload
 
 from src import db
 from src.database.models import Film
 from src.resources.auth import token_required
 
 from src.schemas.films import FilmSchema
+from src.services.film_service import FilmService
 
 
 class FilmListApi(Resource):
     film_schema = FilmSchema()
 
-    @token_required
+    # @token_required
     def get(self, uuid=None):
         if not uuid:
-            films = db.session.query(Film).all()
+            films = FilmService.fetch_all_films(db.session).options(
+                selectinload(Film.actors)
+            ).all()
             return self.film_schema.dump(films, many=True), 200
-        film = db.session.query(Film).filter_by(uuid=uuid).first()
+        film = FilmService.fetch_film_by_uuid(db.session, uuid)
         if not film:
             return '', 404
         return self.film_schema.dump(film), 200
@@ -33,7 +37,7 @@ class FilmListApi(Resource):
 
     def put(self, uuid):
         try:
-            film = db.session.query(Film).filter_by(uuid=uuid).first()
+            film = FilmService.fetch_film_by_uuid(db.session, uuid)
         except ValidationError as e:
             return {'message': str(e)}, 400
         if not film:
@@ -81,7 +85,7 @@ class FilmListApi(Resource):
         # return {'message': 'Updated successfully'}, 200
 
     def delete(self, uuid):
-        film = db.session.query(Film).filter_by(uuid=uuid).first()
+        film = FilmService.fetch_film_by_uuid(db.session, uuid)
         if not film:
             return '', 404
         db.session.delete(film)

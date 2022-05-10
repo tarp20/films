@@ -77,3 +77,11 @@ class User(db.Model):
 
     def __repr__(self):
         return f'{self.username}, {self.uuid}'
+
+    @classmethod
+    def find_user_by_username(cls, username):
+        return cls.query.filter_by(username=username).first()
+
+    @classmethod
+    def find_user_by_uuid(cls, uuid):
+        return cls.query.filter_by(uuid=uuid).first()
